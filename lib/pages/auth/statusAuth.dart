@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:message/model/User.dart';
 import 'package:message/pages/auth/login.dart';
 import 'package:message/pages/messages/message.dart';
 import 'package:message/services/auth.dart';
+import 'package:message/services/db.dart';
 
 class StatusAuthScreen extends StatefulWidget {
   const StatusAuthScreen({Key? key}) : super(key: key);
@@ -13,13 +15,14 @@ class StatusAuthScreen extends StatefulWidget {
 
 class _StatusAuthScreenState extends State<StatusAuthScreen> {
   // Déclartions des variables
-  User? user;
+  UserModel? user;
   AuthServices authServices = AuthServices();
 
   Future<void> getUser() async{
     final result = await authServices.user;
+    final userResult = await DbServices().getUser(result!.uid);
     setState(() {
-      user = result;
+      user = userResult;
     });
   }
 

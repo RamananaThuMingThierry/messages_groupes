@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:message/constants/constants.dart';
+import 'package:message/fonctions/loading.dart';
 import 'package:message/pages/auth/register.dart';
+import 'package:message/pages/auth/statusAuth.dart';
 import 'package:message/services/auth.dart';
 import 'package:message/widgets/PasswordFiledForm.dart';
 import 'package:message/widgets/myTextFieldForm.dart';
@@ -40,6 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Form(
+                key: _key,
                 child: Column(
                   children: [
                     Image(image: AssetImage("assets/logo.jpg"), width: 150),
@@ -95,7 +98,19 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all(Colors.lightBlue)
                           ),
-                          onPressed: (){}, child: Text("Se connecte", style: style.copyWith(color: Colors.white),)),
+                          onPressed: () async{
+                            if(_key.currentState!.validate()){
+                               loading(context);
+                               bool login = await authServices!.signin(email!, mot_de_passe!);
+                               if(login){
+                                 Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (ctx) => StatusAuthScreen()), (route) => false);
+                               }else{
+                                showAlertDialog(context, "Warning", "E-mail ou mot de passe incorrecte!");
+                               }
+                            }else{
+                              print("Non");
+                            }
+                          }, child: Text("Se connecte", style: style.copyWith(color: Colors.white),)),
                     ),
                   ],
                 ),
@@ -114,7 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
               GestureDetector(
                 onTap: (){
                   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext ctx){
-                    return LoginScreen(authServices: authServices,);
+                    return RegisterScreen(authServices: authServices,);
                   }), (route) => false);
                 },
                 child: Text("s'inscrire", style: style.copyWith(color: Colors.lightBlue)),

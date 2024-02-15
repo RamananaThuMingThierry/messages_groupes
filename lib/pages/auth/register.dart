@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:message/constants/constants.dart';
+import 'package:message/fonctions/loading.dart';
 import 'package:message/pages/auth/login.dart';
+import 'package:message/pages/auth/statusAuth.dart';
 import 'package:message/services/auth.dart';
 import 'package:message/widgets/PasswordFiledForm.dart';
 import 'package:message/widgets/myTextFieldForm.dart';
@@ -18,6 +20,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   AuthServices? authServices;
   String? pseudo, email, mot_de_passe, confirmation_mot_de_passe;
   bool visibilite = true;
+  bool c_visibilite = true;
 
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
@@ -33,6 +36,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -105,6 +109,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             mot_de_passe = value;
                           })
                         }),
+                    // Confirmer votre mot de passe
+                    PasswordFieldForm(
+                        visibility: c_visibilite,
+                        validator: () => (value){
+                          if(value == "" || value.isEmpty){
+                            return "Veuillez confirmer votre mot de passe!";
+                          }else if(value != mot_de_passe){
+                            return "Mot de passe ne correspond pas!";
+                          }
+                        },
+                        name: "Confirmer votre mot de passe",
+                        onTap: () => (){
+                          setState(() {
+                            c_visibilite = !c_visibilite;
+                          });
+                          print("${c_visibilite}");
+                        },
+                        onChanged: () => (value) => {
+                          setState(() {
+                            confirmation_mot_de_passe = value;
+                          })
+                        }),
                     SizedBox(height: 20,),
                     //Button
                     SizedBox(
@@ -113,7 +139,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all(Colors.lightBlue)
                           ),
-                          onPressed: (){}, child: Text("S'inscrire", style: style.copyWith(color: Colors.white),)),
+                          onPressed: () async {
+                            if(_key.currentState!.validate()){
+                              loading(context);
+                              print(email! + " " + mot_de_passe!);
+                              bool register = await authServices!.signup(email!, mot_de_passe!, pseudo!);
+                              if(register != null){
+                                Navigator.pop(context);
+                                if(register) Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (ctx) => StatusAuthScreen()), (route) => false);
+                              }
+                            }else{
+                              print("Non");
+                            }
+                          }, child: Text("S'inscrire", style: style.copyWith(color: Colors.white),)),
                     ),
                   ],
                 ),

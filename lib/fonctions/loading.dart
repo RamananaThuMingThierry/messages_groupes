@@ -1,6 +1,6 @@
-import 'package:bv/utils/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:message/constants/constants.dart';
 
 loading(context) => showDialog(
     context: context,
@@ -118,9 +118,12 @@ showAlertDialog(BuildContext context, String? type, String? message){
             Text(title!,textAlign: TextAlign.center ,style: style.copyWith(color: color),),
           ],
         ),
-        content: Text(message!, style: TextStyle(color: Colors.blueGrey),textAlign: TextAlign.center,),
+        content: Text(message!, style: TextStyle(color: Colors.grey),textAlign: TextAlign.center,),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context) , child: Text("Ferme", style: TextStyle(color: Colors.blue))),
+          TextButton(onPressed: (){
+            Navigator.pop(context);
+            Navigator.pop(context);
+          } , child: Text("Ferme", style: style.copyWith(color: Colors.lightBlue))),
         ],
       );
     }

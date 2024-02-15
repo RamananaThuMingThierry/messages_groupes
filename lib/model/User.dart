@@ -1,20 +1,21 @@
-class UserM{
-  String? id, pseudo, email, genre, adresse, contact, image, roles;
-  UserM({this.id, this.pseudo, this.email, this.image, this.contact,this.roles, this.adresse, this.genre});
+class UserModel{
+  String? id, pseudo, email, image;
+  UserModel({this.id, this.pseudo, this.email, this.image});
 
-  static UserM? current;
+  static UserModel? current;
 
-  factory UserM.fromJson(Map<String, dynamic> j){
-    return UserM(
+  factory UserModel.fromJson(Map<String, dynamic> j){
+    return UserModel(
         email: j['email'],
         pseudo: j['pseudo'],
-        genre: j['genre'],
-        adresse: j['adresse'],
-        contact: j['contact'],
         image: j['image'],
-        roles: j['roles'],
         id: j['id']);
   }
 
-  Map<String, dynamic> toMap() => {"id": id, "pseudo" : pseudo, "email" : email,"contact" : contact,"roles": roles, "image": image, "adresse": adresse, "genre" : genre};
+  Map<String, dynamic> toMap() => {
+    "id": id,
+    "pseudo" : pseudo,
+    "email" : email,
+    "image": image,
+  };
 }
