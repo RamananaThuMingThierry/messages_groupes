@@ -24,11 +24,11 @@ class AuthServices{
     }
   }
 
-  Future<bool> signup(String email, String pass, String pseudo) async{
+  Future<bool> signup({String? email, String? pass, String? pseudo, String? contact, String? status}) async{
     try{
-      final result = await auth.createUserWithEmailAndPassword(email: email, password: pass);
+      final result = await auth.createUserWithEmailAndPassword(email: email!, password: pass!);
       if(result.user != null){
-        await DbServices().saveUser(UserModel(id: result.user!.uid, email: email, pseudo: pseudo));
+        await DbServices().saveUser(UserModel(id: result.user!.uid, email: email, pseudo: pseudo, contact: contact, status: status));
         return true;
       }else{
         return false;

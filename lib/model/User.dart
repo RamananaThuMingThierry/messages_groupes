@@ -1,6 +1,6 @@
 class UserModel{
-  String? id, pseudo, email, image;
-  UserModel({this.id, this.pseudo, this.email, this.image});
+  String? id, pseudo, email, image, contact, status;
+  UserModel({this.id, this.pseudo, this.email, this.image, this.contact, this.status});
 
   static UserModel? current;
 
@@ -9,6 +9,8 @@ class UserModel{
         email: j['email'],
         pseudo: j['pseudo'],
         image: j['image'],
+        contact: j['contact'],
+        status: j['status'],
         id: j['id']);
   }
 
@@ -17,5 +19,7 @@ class UserModel{
     "pseudo" : pseudo,
     "email" : email,
     "image": image,
+    "contact" : contact,
+    "status" : status
   };
 }

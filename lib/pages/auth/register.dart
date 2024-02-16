@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:message/constants/constants.dart';
+import 'package:message/fonctions/fonctions.dart';
 import 'package:message/fonctions/loading.dart';
 import 'package:message/pages/auth/login.dart';
 import 'package:message/pages/auth/statusAuth.dart';
@@ -18,7 +19,7 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   // Déclarations des variables
   AuthServices? authServices;
-  String? pseudo, email, mot_de_passe, confirmation_mot_de_passe;
+  String? pseudo, email,contact, status, mot_de_passe, confirmation_mot_de_passe;
   bool visibilite = true;
   bool c_visibilite = true;
 
@@ -64,7 +65,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             return "Votre pseudo doit avoir au moins 6 caractères!";
                           }
                         },
-                        iconData: Icons.account_box,
+                        iconData: Icons.account_circle_outlined,
                         textInputType: TextInputType.name),
                     SizedBox(height: 10,),
                     // Email
@@ -84,8 +85,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             return "Votre adresse e-mail est invalide!";
                           }
                         },
-                        iconData: Icons.email,
+                        iconData: Icons.email_outlined,
                         textInputType: TextInputType.emailAddress),
+                    SizedBox(height: 10,),
+                    // Contact
+                    MyTextFieldForm(
+                        edit: false,
+                        value: "",
+                        name: "Contact",
+                        onChanged: () => (value) => {
+                          setState(() {
+                            contact = value;
+                          })
+                        },
+                        validator: () => (value){
+                          if(value == null || value.isEmpty){
+                            return "Veuillez saisir votre contact";
+                          }else if(value!.length != 10){
+                            return "Votre numéro doit-être composé de 10 chiffres!";
+                          }else if(!verifierPrefixNumeroTelephone(value)){
+                            return "Votre numéro n'est pas valide!";
+                          }
+                        },
+                        iconData: Icons.phone_outlined,
+                        textInputType: TextInputType.phone),
                     SizedBox(height: 10,),
                     // Mot de passe
                     PasswordFieldForm(
@@ -143,7 +166,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             if(_key.currentState!.validate()){
                               loading(context);
                               print(email! + " " + mot_de_passe!);
-                              bool register = await authServices!.signup(email!, mot_de_passe!, pseudo!);
+                              bool register = await authServices!.signup(email: email!, pseudo: pseudo!, pass: mot_de_passe!, contact: contact!, status: "0");
                               if(register != null){
                                 Navigator.pop(context);
                                 if(register) Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (ctx) => StatusAuthScreen()), (route) => false);

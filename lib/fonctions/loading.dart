@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:message/constants/constants.dart';
 
@@ -17,9 +18,9 @@ loading(context) => showDialog(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              CircularProgressIndicator(color: Colors.green,),
+              SpinKitCircle(color: Colors.lightBlue,),
               SizedBox(height: 16,),
-              Text("Veuillez patientez...", style: TextStyle(color: Colors.grey),),
+              Text("Veuillez patientez...", style: style.copyWith(color: Colors.blueGrey),),
             ],
           ),
         ),

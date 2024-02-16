@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:message/model/User.dart';
 import 'package:message/pages/auth/login.dart';
 import 'package:message/pages/messages/message.dart';
@@ -24,11 +25,21 @@ class _StatusAuthScreenState extends State<StatusAuthScreen> {
     setState(() {
       user = userResult;
     });
+    if(user == null){
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (ctx) => LoginScreen(authServices: authServices)), (route) => false);
+    }else{
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (ctx) => MessageScreen(user: user, authServices: authServices)), (route) => false);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     getUser();
-    return user == null ? LoginScreen(authServices: authServices,) : MessageScreen(user: user, authServices: authServices,);
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Center(
+        child: SpinKitCircle(color: Colors.lightBlue,size: 50,)
+      ),
+    );
   }
 }
