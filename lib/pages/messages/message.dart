@@ -11,6 +11,7 @@ import 'package:message/model/User.dart';
 import 'package:message/pages/auth/login.dart';
 import 'package:message/pages/auth/statusAuth.dart';
 import 'package:message/pages/contacts/addContact.dart';
+import 'package:message/pages/contacts/updateContact.dart';
 import 'package:message/pages/profiles/profile.dart';
 import 'package:message/pages/sim/sim.dart';
 import 'package:message/pages/utilisateurs/users.dart';
@@ -151,6 +152,8 @@ class _MessageScreenState extends State<MessageScreen> {
                 leading: Icon(Icons.info_outlined, color: Colors.blueGrey,),
                 title: Text("Apropos", style: style,),
                 onTap: (){
+                  _key.currentState!.openEndDrawer();
+                  showAlertDialogAbout(context);
                 },
               ),
               Ligne(color: Colors.grey,),
@@ -159,8 +162,7 @@ class _MessageScreenState extends State<MessageScreen> {
                 title: Text("Déconnection", style: style,),
                 onTap: () async{
                   Navigator.pop(context);
-                  await authServices!.signOut();
-                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (ctx) => LoginScreen(authServices: authServices)), (route) => false);
+                  deconnectionAlertDialog(context, authServices!);
                 },
               ),
               Ligne(color: Colors.grey,),
@@ -205,10 +207,46 @@ class _MessageScreenState extends State<MessageScreen> {
                                 ,
                                 title: Text("${personne.nom}", style: style.copyWith(color: Colors.blueGrey),),
                                 subtitle: Text("${personne.contact}", style: style.copyWith(color: Colors.grey),),
-                                trailing: IconButton(
-                                  onPressed: (){},
-                                  icon: Icon(Icons.more_vert),
-                                ),
+                                trailing: PopupMenuButton(
+                                  child: Padding(
+                                    padding: EdgeInsets.only(right: 10),
+                                    child: Icon(Icons.more_vert, color: Colors.black,),
+                                  ),
+                                  onSelected: (valeur){
+                                    if(valeur == "Modifier"){
+                                      // Modifier
+                                      Navigator.push(context, MaterialPageRoute(builder: (ctx) => UpdateContact(personne: personne, authServices: authServices!)));
+                                      print("Modifier");
+                                    }else{
+                                      // Supprimer
+                                      print("Supprimer");
+                                    }
+                                  },
+                                  itemBuilder: (ctx) => [
+                                    PopupMenuItem(
+                                      value: "Modifier",
+                                      child: Row(
+                                        children: [
+                                          Icon(Icons.edit, color: Colors.lightBlue,),
+                                          SizedBox(width: 10,),
+                                          Text("Modifier", style: style.copyWith(color: Colors.lightBlue)),
+                                        ]
+                                        ,
+                                      ),
+                                    ),
+                                    PopupMenuItem(
+                                      child: Row(
+                                        children: [
+                                          Icon(Icons.delete, color: Colors.red,),
+                                          SizedBox(width: 10,),
+                                          Text("Supprimer", style: style.copyWith(color: Colors.red)),
+                                        ]
+                                        ,
+                                      ),
+                                      value: "Supprimer",
+                                    )
+                                  ],
+                                )
                               ),
                             ),
                           ),

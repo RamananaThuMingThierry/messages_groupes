@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:message/constants/constants.dart';
 import 'package:message/fonctions/fonctions.dart';
 import 'package:message/model/User.dart';
+import 'package:message/pages/profiles/updatePassword.dart';
 
 class Profile extends StatefulWidget {
   UserModel user;
@@ -33,6 +34,14 @@ class _ProfileState extends State<Profile> {
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
+        actions: [
+          IconButton(
+              onPressed: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (ctx) => ModifierMotDePasse(user: user!,)));
+              },
+              icon: Icon(Icons.settings_outlined, color: Colors.grey,)
+          )
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(

@@ -21,15 +21,16 @@ class _StatusAuthScreenState extends State<StatusAuthScreen> {
 
   Future<void> getUser() async{
     final result = await authServices.user;
-    final userResult = await DbServices().getUser(result!.uid);
-    setState(() {
-      user = userResult;
-    });
-    if(user == null){
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (ctx) => LoginScreen(authServices: authServices)), (route) => false);
-    }else{
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (ctx) => MessageScreen(user: user, authServices: authServices)), (route) => false);
-    }
+   if(result == null){
+     Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (ctx) => LoginScreen(authServices: authServices)), (route) => false);
+   }else{
+     final userResult = await DbServices().getUser(result!.uid);
+     setState(() {
+       user = userResult;
+     });
+     Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (ctx) => MessageScreen(user: user, authServices: authServices)), (route) => false);
+   }
+
   }
 
   @override
